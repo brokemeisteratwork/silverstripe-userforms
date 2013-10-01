@@ -1,7 +1,17 @@
+# UserForms (Updated by Malte Jansen <work at maltejansen dot de>)
+
+##Some Hooks are added, to extend userforms without any further code intervention.
+
+	* UserDefinedForm
+	* UserDefinedForm_Controller
+	* EditableFormField
+	
+##New Extension
+
+	* EditableFormFieldExtension
+
 # UserForms
-
-[![Build Status](https://secure.travis-ci.org/silverstripe/silverstripe-userforms.png?branch=master)](http://travis-ci.org/silverstripe/silverstripe-userforms)
-
+	
 ## Introduction
 
 UserForms enables CMS users to create dynamic forms via a drag and drop interface 
