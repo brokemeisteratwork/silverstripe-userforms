@@ -276,6 +276,8 @@ class EditableFormField extends DataObject {
 				)));
 			}
 		}
+		
+		$this->extend('updateCustomRules', $output);
 	
 		return $output;
 	}
@@ -294,6 +296,8 @@ class EditableFormField extends DataObject {
 		if(!$this->canEdit()) {
 			return $field->performReadonlyTransformation();
 		}
+		
+		$this->extend('updateTitleField', $field);
 
 		return $field;
 	}
@@ -377,6 +381,8 @@ class EditableFormField extends DataObject {
 			$this->CustomRules = serialize($rules);
 		}
 		
+		$this->extend('updatePopulateFromPostData', $data);
+		
 		$this->write();
 	}
 	 
@@ -416,10 +422,14 @@ class EditableFormField extends DataObject {
 			$this->getSetting('RightTitle')
 		);
 			
-		return new FieldList(
+		$fields = new FieldList(
 			$ec,
 			$right
 		);
+		
+		$this->extend('updateFieldConfiguration', $fields);
+		
+		return $fields;
 	}
 	
 	/**
@@ -439,6 +449,8 @@ class EditableFormField extends DataObject {
 				$field->performReadonlyTransformation();
 			}
 		}
+		
+		$this->extend('updateFieldValidationOptions', $fields);
 		
 		return $fields;
 	}
@@ -496,6 +508,10 @@ class EditableFormField extends DataObject {
 		
 		$errorMessage = ($this->CustomErrorMessage) ? $this->CustomErrorMessage : $standard;
 		
-		return DBField::create_field('Varchar', $errorMessage);
+		$field = DBField::create_field('Varchar', $errorMessage);
+		
+		$this->extend('updateErrorMessage', $field);
+		
+		return $field;
 	}
 }

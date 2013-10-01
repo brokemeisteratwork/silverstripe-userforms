@@ -871,6 +871,8 @@ JS
 		Session::set("FormInfo.{$form->FormName()}.data",$data);	
 		Session::clear("FormInfo.{$form->FormName()}.errors");
 		
+		$this->extend('beforeProcess', $data, $form);
+		
 		foreach($this->Fields() as $field) {
 			$messages[$field->Name] = $field->getErrorMessage()->HTML();
 				
@@ -963,6 +965,8 @@ JS
 			"Fields" => $submittedFields
 		);
 
+		$this->extend('beforeProcessEmail', $emailData, $data, $form);
+
 		// email users on submit.
 		if($recipients = $this->FilteredEmailRecipients($data, $form)) {
 			$email = new UserDefinedForm_SubmittedFormEmail($submittedFields); 
@@ -1026,13 +1030,18 @@ JS
 				}
 			}
 		}
+		$this->extend('afterProcessEmail', $emailData, $data, $form);
 		
 		Session::clear("FormInfo.{$form->FormName()}.errors");
 		Session::clear("FormInfo.{$form->FormName()}.data");
 		
 		$referrer = (isset($data['Referrer'])) ? '?referrer=' . urlencode($data['Referrer']) : "";
 		
-		return $this->redirect($this->Link() . 'finished' . $referrer);
+		$Link = $this->Link();
+		$Action = 'finished';
+		$this->extend('afterProcess', $Link, $Action, $referrer);
+		
+		return $this->redirect($Link . $Action . $referrer);
 	}
 
 	/**
